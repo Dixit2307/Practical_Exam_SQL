@@ -318,3 +318,80 @@ WHERE student_id IN (
     GROUP BY student_id 
     HAVING COUNT(*) > 10
 );
+-- SQLBook: Markup
+## Extract the month from attendance_date to analyze attendance trends.
+-- SQLBook: Code
+
+SELECT attendance_id, student_id, attendance_date, MONTH(attendance_date) AS attendance_month
+FROM Attendance;
+
+-- SQLBook: Markup
+##  Calculate number of years since admission
+-- SQLBook: Code
+
+SELECT student_id, first_name, admission_date, 
+       TIMESTAMPDIFF(YEAR, admission_date, CURDATE()) AS years_enrolled
+FROM Students;
+-- SQLBook: Markup
+##  Format attendance date as DD-MM-YYYY
+-- SQLBook: Code
+
+SELECT attendance_id, student_id, DATE_FORMAT(attendance_date, '%d-%m-%Y') AS formatted_date
+FROM Attendance;
+-- SQLBook: Markup
+##  Uppercase faculty names
+-- SQLBook: Code
+
+SELECT faculty_id, UPPER(name) AS faculty_name_upper FROM Faculty;
+-- SQLBook: Markup
+## Replace NULL emails
+-- SQLBook: Code
+
+SELECT faculty_id, name, COALESCE(email, 'Email Not Provided') AS display_email FROM Faculty;
+-- SQLBook: Markup
+##  Rank students based on overall marks
+-- SQLBook: Code
+
+SELECT student_id, marks_obtained,
+       DENSE_RANK() OVER (ORDER BY marks_obtained DESC) AS marks_rank
+FROM Grades;
+-- SQLBook: Markup
+##  Cumulative attendance percentage per course
+-- SQLBook: Code
+
+SELECT attendance_id, course_id, student_id, attendance_date, status,
+       ROUND((SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) OVER (PARTITION BY course_id ORDER BY attendance_date) * 100.0) / 
+       COUNT(*) OVER (PARTITION BY course_id ORDER BY attendance_date), 2) AS cumulative_attendance_pct
+FROM Attendance;
+-- SQLBook: Markup
+## Running total of students enrolled per month
+-- SQLBook: Code
+
+SELECT DATE_FORMAT(enrollment_date, '%Y-%m') AS enrollment_month,
+       COUNT(*) AS monthly_enrollments,
+       SUM(COUNT(*)) OVER (ORDER BY DATE_FORMAT(enrollment_date, '%Y-%m')) AS running_total
+FROM Enrollments
+GROUP BY DATE_FORMAT(enrollment_date, '%Y-%m');
+-- SQLBook: Markup
+## Student performance levels
+-- SQLBook: Code
+
+SELECT student_id, course_id, marks_obtained,
+       CASE 
+           WHEN marks_obtained > 90 THEN 'Excellent'
+           WHEN marks_obtained BETWEEN 75 AND 90 THEN 'Good'
+           ELSE 'Needs Improvement'
+       END AS performance_level
+FROM Grades;
+-- SQLBook: Markup
+## Categorize attendance records
+-- SQLBook: Code
+SELECT student_id,
+       ROUND((SUM(status = 'Present') / COUNT(*)) * 100, 2) AS attendance_pct,
+       CASE 
+           WHEN (SUM(status = 'Present') / COUNT(*)) * 100 > 80 THEN 'Regular'
+           WHEN (SUM(status = 'Present') / COUNT(*)) * 100 BETWEEN 50 AND 80 THEN 'Irregular'
+           ELSE 'Defaulter'
+       END AS attendance_category
+FROM Attendance
+GROUP BY student_id;
