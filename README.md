@@ -1,6 +1,6 @@
 
 ::: {align="center"}
-# 🎓 University Management System
+# 🎓 Student Performence & Attendence Management System
 
 ### `SQL` • `Database Design` • `MySQL`
 
