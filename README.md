@@ -1,4 +1,3 @@
-# Practical_Exam_SQL
 
 ::: {align="center"}
 # 🎓 University Management System
