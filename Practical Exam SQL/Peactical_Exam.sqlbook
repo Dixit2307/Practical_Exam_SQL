@@ -1,0 +1,320 @@
+-- SQLBook: Markup
+# Student Performance & Attendance Tracker
+-- SQLBook: Code
+-- Active: 1787030903737@@127.0.0.1@3306@practical_exam_db
+CREATE DATABASE Practical_Exam_db;
+
+-- SQLBook: Code
+USE Practical_Exam_db;
+-- SQLBook: Markup
+## Table of Department
+
+-- SQLBook: Code
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(100)
+);
+
+-- SQLBook: Code
+INSERT INTO departments (department_id, department_name) VALUES 
+(101, 'Computer Science and Engineering'),
+(102, 'Data Science and AI'),
+(103, 'Electronics and Communication'),
+(104, 'Mechanical Engineering'),
+(105, 'Information Technology');
+
+-- SQLBook: Markup
+## Table of Students
+
+-- SQLBook: Code
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    dob DATE,
+    gender VARCHAR(10),
+    email VARCHAR(100),
+    phone_number VARCHAR(15),
+    address TEXT,
+    admission_date DATE,
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+    
+-- SQLBook: Code
+INSERT INTO students (student_id, name, dob, gender, email, phone_number, address, admission_date, department_id) VALUES 
+(1, 'Aarav Sharma', '2005-04-12', 'Male', 'aarav.sharma@email.com', '+919876543210', '123 MG Road, Mumbai, Maharashtra', '2024-07-15', 101),
+(2, 'Ananya Iyer', '2004-11-23', 'Female', 'ananya.iyer@email.com', '+919876543211', '456 IT Park Lane, Bengaluru, Karnataka', '2024-07-16', 102),
+(3, 'Kabir Malhotra', '2005-01-05', 'Male', 'kabir.m@email.com', '+919876543212', '789 Link Road, Delhi', '2024-07-15', 101),
+(4, 'Diya Patel', '2005-08-30', 'Female', 'diya.patel@email.com', '+919876543213', '101 Residency Road, Ahmedabad, Gujarat', '2024-07-18', 103),
+(5, 'Reyansh Das', '2004-05-14', 'Male', 'reyansh.das@email.com', '+919876543214', '202 Salt Lake, Sector 5, Kolkata, West Bengal', '2024-07-15', 104);
+
+-- SQLBook: Markup
+## Table of Faculty
+-- SQLBook: Code
+
+CREATE TABLE faculty (
+    faculty_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100),
+    phone_number VARCHAR(15),
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+-- SQLBook: Code
+INSERT INTO faculty (faculty_id, name, email, phone_number, department_id) VALUES 
+(501, 'Dr. Rajesh Verma', 'rajesh.verma@university.edu', '+919876543220', 101),
+(502, 'Prof. Sneha Kulkarni', 'sneha.k@university.edu', '+919876543221', 102),
+(503, 'Dr. Amit Joshi', 'amit.joshi@university.edu', '+919876543222', 103),
+(504, 'Dr. Vikram Rathore', 'vikram.r@university.edu', '+919876543223', 104),
+(505, 'Prof. Priya Nair', 'priya.nair@university.edu', '+919876543224', 105);
+
+-- SQLBook: Markup
+## Table of Cources
+-- SQLBook: Code
+CREATE TABLE courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(50),
+    faculty_id INT,
+    FOREIGN KEY (faculty_id) REFERENCES faculty(faculty_id) 
+);
+
+-- SQLBook: Code
+INSERT INTO courses (course_id, course_name, faculty_id) VALUES 
+(301, 'Introduction to Computer Science', 501),
+(302, 'Machine Learning Basics', 502),
+(303, 'Digital Electronics', 503),
+(304, 'Thermodynamics', 504),
+(305, 'Web Development Fundaments', 505);
+
+-- SQLBook: Markup
+## Enrolment Table
+-- SQLBook: Code
+CREATE TABLE enrollments (
+    enrollment_id INT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    enrollment_date DATE,
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+-- SQLBook: Code
+INSERT INTO enrollments (enrollment_id, student_id, course_id, enrollment_date) VALUES 
+(801, 1, 301, '2024-07-20'),
+(802, 2, 302, '2024-07-21'),
+(803, 3, 301, '2024-07-20'),
+(804, 4, 303, '2024-07-22'),
+(805, 5, 304, '2024-07-20');
+
+-- SQLBook: Markup
+## Attendence Table
+
+-- SQLBook: Code
+CREATE TABLE attendance (
+    attendance_id INT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    attendance_date DATE,
+    status VARCHAR(10) CHECK (status IN ('Present', 'Absent', 'Late')),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+-- SQLBook: Code
+INSERT INTO attendance (attendance_id, student_id, course_id, attendance_date, status) VALUES 
+(901, 1, 301, '2024-07-21', 'Present'),
+(902, 2, 302, '2024-07-21', 'Absent'),
+(903, 3, 301, '2024-07-21', 'Late'),
+(904, 4, 303, '2024-07-22', 'Present'),
+(905, 5, 304, '2024-07-20', 'Present');
+-- SQLBook: Markup
+## Grades Table
+-- SQLBook: Code
+CREATE TABLE grades (
+    grade_id INT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    marks_obtained DECIMAL(5,2),
+    grade VARCHAR(5),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+-- SQLBook: Code
+INSERT INTO grades (grade_id, student_id, course_id, marks_obtained, grade) VALUES 
+(1001, 1, 301, 88.50, 'A'),
+(1002, 2, 302, 76.00, 'B'),
+(1003, 3, 301, 92.00, 'A+'),
+(1004, 4, 303, 65.50, 'C'),
+(1005, 5, 304, 80.00, 'B+');
+-- SQLBook: Markup
+## Query Performe
+-- SQLBook: Markup
+### Basic CRUD
+-- SQLBook: Code
+UPDATE Students 
+SET phone_number = '9998887776', address = '999 New Residency' 
+WHERE student_id = 1;
+-- SQLBook: Code
+DELETE FROM students WHERE student_id = 3;
+-- SQLBook: Code
+SELECT s.* 
+FROM Students s
+JOIN Departments d ON s.department_id = d.department_id
+WHERE d.department_name = 'Computer Science';
+-- SQLBook: Code
+
+-- SQLBook: Markup
+### Top 3 Student That Score Highest
+-- SQLBook: Code
+SELECT s.student_id, s.name, g.marks_obtained 
+FROM Students s
+JOIN Grades g ON s.student_id = g.student_id
+ORDER BY g.marks_obtained DESC
+LIMIT 3;
+-- SQLBook: Code
+SELECT student_id,
+       ROUND((SUM(status = 'Present') / COUNT(*)) * 100, 2) AS attendance_pct
+FROM attendance
+GROUP BY student_id
+HAVING attendance_pct < 75;
+-- SQLBook: Code
+SELECT s.student_id, s.name
+FROM Students s
+JOIN Grades g ON s.student_id = g.student_id
+JOIN (
+    SELECT student_id, (SUM(status = 'Present') / COUNT(*)) * 100 AS attendance_pct
+    FROM Attendance
+    GROUP BY student_id
+) a ON s.student_id = a.student_id
+WHERE a.attendance_pct < 50 AND g.marks_obtained < 40;
+-- SQLBook: Markup
+##  Scored above 90 OR perfect attendance (100%)
+-- SQLBook: Code
+
+SELECT DISTINCT s.student_id, s.name
+FROM Students s
+LEFT JOIN Grades g ON s.student_id = g.student_id
+LEFT JOIN (
+    SELECT student_id, (SUM(status = 'Present') / COUNT(*)) * 100 AS attendance_pct
+    FROM Attendance
+    GROUP BY student_id
+) a ON s.student_id = a.student_id
+WHERE g.marks_obtained > 90 OR a.attendance_pct = 100;
+-- SQLBook: Markup
+##  Faculty members NOT assigned to any course
+-- SQLBook: Code
+
+SELECT f.*
+FROM Faculty f
+LEFT JOIN Courses c ON f.faculty_id = c.faculty_id
+WHERE c.course_id IS NULL;
+-- SQLBook: Markup
+##  Students alphabetically by name
+-- SQLBook: Code
+
+SELECT * FROM Students 
+ORDER BY name ASC;
+-- SQLBook: Markup
+##  Number of students per department
+-- SQLBook: Code
+
+SELECT d.department_name, COUNT(s.student_id) AS total_students
+FROM Departments d
+LEFT JOIN Students s ON d.department_id = s.department_id
+GROUP BY d.department_id, d.department_name;
+-- SQLBook: Markup
+## Average marks per course
+-- SQLBook: Code
+
+SELECT c.course_name, ROUND(AVG(g.marks_obtained), 2) AS avg_marks
+FROM Courses c
+JOIN Grades g ON c.course_id = g.course_id
+GROUP BY c.course_id, c.course_name;
+-- SQLBook: Markup
+##  Average attendance percentage across all records
+-- SQLBook: Code
+
+SELECT ROUND((SUM(status = 'Present') / COUNT(*)) * 100, 2) AS avg_overall_attendance
+FROM Attendance;
+-- SQLBook: Markup
+## Highest and lowest marks per course
+-- SQLBook: Code
+
+SELECT c.course_name, 
+       MAX(g.marks_obtained) AS highest_score, 
+       MIN(g.marks_obtained) AS lowest_score
+FROM Courses c
+JOIN Grades g ON c.course_id = g.course_id
+GROUP BY c.course_id, c.course_name;
+-- SQLBook: Markup
+## Total number of students per department
+-- SQLBook: Code
+
+SELECT d.department_name, COUNT(s.student_id) AS student_count
+FROM Departments d
+LEFT JOIN Students s ON d.department_id = s.department_id
+GROUP BY d.department_id, d.department_name;
+-- SQLBook: Markup
+## INNER JOIN: Student details with department
+-- SQLBook: Code
+
+SELECT s.student_id, s.first_name, s.last_name, d.department_name
+FROM Students s
+INNER JOIN Departments d ON s.department_id = d.department_id;
+-- SQLBook: Markup
+##  LEFT JOIN: Students not enrolled in any course
+-- SQLBook: Code
+SELECT s.student_id, s.name
+FROM Students s
+LEFT JOIN Enrollments e ON s.student_id = e.student_id
+WHERE e.enrollment_id IS NULL;
+-- SQLBook: Markup
+##  RIGHT JOIN: Courses that have no faculty assigned
+
+-- SQLBook: Code
+SELECT c.course_id, c.course_name, f.faculty_name
+FROM Faculty f
+RIGHT JOIN Courses c ON f.faculty_id = c.faculty_id
+WHERE f.faculty_id IS NULL;
+-- SQLBook: Markup
+##  FULL OUTER JOIN (Emulated in MySQL using UNION): Students and Grades
+-- SQLBook: Code
+
+SELECT s.student_id, s.name, g.course_id, g.marks_obtained
+FROM Students s
+LEFT JOIN grades g ON s.student_id = g.student_id
+WHERE g.grade_id IS NULL
+UNION
+SELECT s.student_id, s.name, g.course_id, g.marks_obtained
+FROM Students s
+RIGHT JOIN grades g ON s.student_id = g.student_id
+WHERE s.student_id IS NULL;
+-- SQLBook: Markup
+## -- Students with marks above average score
+-- SQLBook: Code
+
+SELECT student_id, course_id, marks_obtained
+FROM Grades
+WHERE marks_obtained > (SELECT AVG(marks_obtained) FROM Grades);
+
+
+-- SQLBook: Markup
+##  Courses taught by faculty members with at least 5 years of experience
+-- SQLBook: Code
+
+SELECT course_name
+FROM Courses
+WHERE faculty_id IN (
+    SELECT faculty_id FROM Faculty WHERE experience_years >= 5
+);
+-- SQLBook: Markup
+##  Students who have missed more than 10 classes
+
+-- SQLBook: Code
+SELECT student_id, name
+FROM Students
+WHERE student_id IN (
+    SELECT student_id 
+    FROM Attendance 
+    WHERE status = 'Absent' 
+    GROUP BY student_id 
+    HAVING COUNT(*) > 10
+);
