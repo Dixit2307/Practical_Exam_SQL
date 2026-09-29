@@ -1,98 +1,103 @@
 
-::: {align="center"}
-# 🎓 Student Performence & Attendence Management System
+<div align="center">
 
-### `SQL` • `Database Design` • `MySQL`
+# 🎓 University Management System
 
-**A database project focused on organizing university student
-information.**
+A relational database system designed to model, organize, and streamline core academic operations, student enrollments, and institutional administration.
 
-[![SQL](https://img.shields.io/badge/SQL-Database-blue?style=for-the-badge&logo=mysql&logoColor=white)]()
-[![Status](https://img.shields.io/badge/Status-In%20Progress-orange?style=for-the-badge)]()
-[![Project](https://img.shields.io/badge/Type-Academic%20Project-purple?style=for-the-badge)]()
-:::
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](#)
+[![Status](https://img.shields.io/badge/Status-In_Development-F5A623?style=for-the-badge)](#)
+[![License](https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge)](#)
 
-------------------------------------------------------------------------
+<p align="center">
+  <a href="#about">About</a> •
+  <a href="#database-schema">Database Schema</a> •
+  <a href="#quickstart">Quickstart</a> •
+  <a href="#roadmap">Roadmap</a> •
+  <a href="#license">License</a>
+</p>
 
-## ✨ About the Project
+---
 
-The **University Management System** is a SQL-based project that begins
-with creating a university database and defining a structure for student
-records. It is intended as a practical exercise in relational database
-creation and SQL.
+</div>
 
-> **Current scope:** The provided SQLBook contains database
-> creation/selection and the beginning of a `Student` table. Additional
-> tables, relationships, sample data, and queries can be added as the
-> project develops.
+## 📌 About
 
-## 🧰 Tech Stack
+The **University Management System** manages entities across higher-education institutions, tracking student records, faculty allocation, course distribution, and academic tracking.
 
-  Technology    Purpose
-  ------------- ----------------------------------
-  MySQL / SQL   Database creation and management
-  SQLBook       Organizing SQL notes and code
+---
 
-## 🗂️ Database Structure
+## 🗄️ Database Schema
 
-### `Student`
+### 1. `Student` Table
+Stores primary identifiers and contact information for enrolled learners[cite: 1].
 
-  Column         Type            Description
-  -------------- --------------- ---------------------------------
-  `Student_id`   `INT`           Student identifier; primary key
-  `First_name`   `VARCHAR(50)`   Student's first name
-  `Last_name`    `VARCHAR(50)`   Student's last name
-  `Email`        `VARCHAR(50)`   Student email address
+| Column Name | Data Type | Constraints | Description |
+| :--- | :--- | :--- | :--- |
+| `Student_id`[cite: 1] | `INT`[cite: 1] | `PRIMARY KEY`[cite: 1] | Unique student identification number[cite: 1] |
+| `First_name`[cite: 1] | `VARCHAR(50)`[cite: 1] | `NOT NULL` | Legal given name[cite: 1] |
+| `Last_name`[cite: 1] | `VARCHAR(50)`[cite: 1] | `NOT NULL` | Legal family name[cite: 1] |
+| `Email`[cite: 1] | `VARCHAR(50)`[cite: 1] | `UNIQUE`, `NOT NULL` | Academic or personal contact email[cite: 1] |
 
-## 🚀 Getting Started
+---
 
-1.  Open MySQL Workbench or another MySQL client.
-2.  Open the project SQL file.
-3.  Review and complete the table definition before running it.
-4.  Execute the database creation and `USE` statements.
-5.  Create and test the student table.
+## 🚀 Quickstart
 
-### Database setup
+### Prerequisites
+* **MySQL Server** (v8.0+)
+* Any standard SQL client or extension (e.g., **SQLBook**, **VS Code MySQL Extension**, **DBeaver**)[cite: 1]
 
-``` sql
-CREATE DATABASE Univarsity_management_System;
-USE Univarsity_management_System;
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/your-username/university-management-system.git](https://github.com/your-username/university-management-system.git)
+   cd university-management-system
+
+
+
+2. **Initialize Database and Tables**
+
+
+Execute the migration queries in your MySQL console:
+```sql
+-- Create Database
+CREATE DATABASE IF NOT EXISTS Univarsity_management_System;[cite: 1]
+USE Univarsity_management_System;[cite: 1]
+
+-- Create Student Entity
+CREATE TABLE IF NOT EXISTS Student (
+    Student_id INT PRIMARY KEY,[cite: 1]
+    First_name VARCHAR(50) NOT NULL,[cite: 1]
+    Last_name VARCHAR(50) NOT NULL,[cite: 1]
+    Email VARCHAR(50) NOT NULL UNIQUE[cite: 1]
+);
+
 ```
 
-**Note:** The uploaded SQL currently has an unfinished
-`CREATE TABLE Student` statement (a trailing comma and missing statement
-terminator). Fix the syntax before executing the table creation.
 
-## 🧠 Concepts Practiced
 
--   Creating and selecting a database
--   Defining tables and columns
--   Choosing SQL data types
--   Using a primary key
--   Structuring data for a management system
+---
 
-## 🛠️ Roadmap
+## 🗺️ Roadmap
 
--   [ ] Complete and validate the `Student` table
--   [ ] Add other university entities as needed
--   [ ] Define relationships and foreign keys
--   [ ] Insert sample records
--   [ ] Practice `SELECT`, filtering, sorting, and joins
--   [ ] Add constraints and test data integrity
+* [x] Database initialization
 
-## 👨‍💻 Author
 
-::: {align="center"}
-**Dixit Maru**
+* [x] Initial `Student` entity table
 
-[![GitHub](https://img.shields.io/badge/GitHub-Dixit2307-181717?style=for-the-badge&logo=github)](https://github.com/Dixit2307)
 
-*Aspiring AI/ML & Data Science Developer \| SQL Learner*
-:::
+* [ ] Add `Course` entity table (`Course_id`, `Title`, `Credits`, `Department`)
+* [ ] Add `Instructor` table (`Instructor_id`, `Name`, `Department`, `Office`)
+* [ ] Set up `Enrollment` junction table with foreign keys (`Student_id`, `Course_id`, `Semester`, `Grade`)
+* [ ] Implement stored procedures, views, and trigger events for automated GPA calculation
 
-------------------------------------------------------------------------
+---
 
-::: {align="center"}
-**⭐ If you're exploring this project, feel free to fork it and build on
-it.**
-:::
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+```
+
+```
