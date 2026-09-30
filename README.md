@@ -1,4 +1,4 @@
-```markdown
+
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&height=280&color=0:0B0F19,40:1E293B,100:0F172A&text=📊%20STUDENT%20PERFORMANCE%20TRACKER&fontColor=00F7FF&fontSize=34&animation=twinkle"/>
 </p>
